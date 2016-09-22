@@ -1,0 +1,95 @@
+﻿@model List<Room>
+
+@{
+	ViewBag.Title = "Dashboard";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="row">
+	<button class="btn btn-default" id="lockall" data-state="false">Lock all locks</button>
+	<button class="btn btn-default" id="unlockall" data-state="true">Unlock all locks</button>
+	<button class="btn btn-default" id="lockrandom" data-state="true">Lock Random Door</button>
+</div>
+
+<ul class="rooms">
+	@foreach (var room in Model) {
+		<li class="room">
+			<h2>Room: @room.RoomName</h2>
+
+			<ul class="doors">
+				@foreach (var door in room.Doors) {
+					<li class="door">
+						<h3>Door: @door.DoorName</h3>
+
+						<ul class="locks">
+							@foreach (var lck in door.Locks) {
+								<li class="lock @(lck.IsUnlocked ? "unlocked" : "locked")">
+									<button class="btn btn-default lockit" data-id="@lck.LockId">Lock</button>
+									<button class="btn btn-default unlockit" data-id="@lck.LockId">Unlock</button>
+									@lck.LockType is @(lck.IsUnlocked ? "unlocked" : "locked")
+								</li>
+							}
+						</ul>
+					</li>
+				}
+			</ul>
+		</li>
+	}
+</ul>
+
+@section scripts {
+	<script>
+		$('#lockall').click(function (e) {
+			e.preventDefault();
+			$.getJSON(
+				'/Dashboard/LockEverything?IsUnlocked=false',
+				function (r) {
+					window.location.href = window.location.href; // refresh
+				}
+			);
+		});
+		$('#unlockall').click(function (e) {
+			e.preventDefault();
+			$.getJSON(
+				'/Dashboard/LockEverything?IsUnlocked=true',
+				function (r) {
+					window.location.href = window.location.href; // refresh
+				}
+			);
+		});
+		$('#lockrandom').click(function (e) {
+			e.preventDefault();
+			$.getJSON(
+				'/Dashboard/LockRandomDoor?IsUnlocked=false',
+				function (r) {
+					window.location.href = window.location.href; // refresh
+				}
+			);
+		});
+		$('.lockit').click(function (e) {
+			e.preventDefault();
+			var that = $(this);
+			var lockId = that.data('id');
+			$.getJSON(
+				'/Dashboard/LockTheLock?IsUnlocked=false&LockId='+lockId,
+				function (r) {
+					var li = that.parent('.lock');
+					li.removeClass('unlocked').addClass('locked');
+				}
+			);
+		});
+		$('.unlockit').click(function (e) {
+			e.preventDefault();
+			var that = $(this);
+			var lockId = that.data('id');
+			$.getJSON(
+				'/Dashboard/LockTheLock?IsUnlocked=true&LockId=' + lockId,
+				function (r) {
+					var li = that.parent('.lock');
+					li.removeClass('locked').addClass('unlocked');
+				}
+			);
+		});
+	</script>
+}

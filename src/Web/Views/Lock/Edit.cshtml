@@ -1,0 +1,46 @@
+﻿@model LockViewModel
+
+@{
+	ViewBag.Title = "Edit Lock";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<form asp-controller="Lock" asp-action="Edit" asp-route-id="@Model.Lock.LockId" method="post" class="form-horizontal" role="form">
+	<div class="form-horizontal">
+		<div asp-validation-summary="All" class="text-danger"></div>
+		<div class="form-group">
+			<label class="col-md-2 control-label">Lock Type</label>
+			<div class="col-md-10">
+				<select name="LockType" id="LockType" class="form-control">
+					@foreach (var lockType in Model.AllLockTypes) {
+						<option value="@((int)lockType)" selected="@(lockType == Model.Lock.LockType)">@lockType.ToString()</option>
+					}
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-md-2 control-label">Door</label>
+			<div class="col-md-10">
+				<select name="DoorId" id="DoorId" class="form-control">
+					@foreach (var door in Model.AllDoors) {
+						<option value="@door.DoorId" selected="@(door.DoorId == Model.Lock.DoorId)">@door.DoorName</option>
+					}
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-md-2 control-label">Is unlocked</label>
+			<div class="col-md-10">
+				<label>
+					<input type="checkbox" id="IsUnlocked" name="IsUnlocked" value="true" checked="@Model.Lock.IsUnlocked"> Is Unlocked
+				</label>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-md-offset-2 col-md-10">
+				<input type="submit" value="Save" class="btn btn-default"/>
+			</div>
+		</div>
+	</div>
+</form>

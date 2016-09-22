@@ -1,0 +1,29 @@
+﻿@model List<Door>
+
+@{
+	ViewBag.Title = "Doors";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+	<a asp-controller="Door" asp-action="Create" class="btn btn-default">Create New</a>
+</p>
+
+<table class="table">
+	<tr>
+		<th>Id</th>
+		<th>Door Name</th>
+		<th>Room Name</th>
+	</tr>
+
+	@foreach (var item in Model) {
+		<tr>
+			<td>
+				<a asp-controller="Door" asp-action="Edit" asp-route-id="@item.DoorId">@item.DoorId</a>
+			</td>
+			<td>@item.DoorName</td>
+			<td>@item.Room.RoomName</td>
+		</tr>
+	}
+</table>

@@ -1,0 +1,13 @@
+CREATE TABLE [dbo].[Door]
+(
+[DoorId] [int] NOT NULL IDENTITY(1, 1),
+[DoorName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[RoomId] [int] NOT NULL
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Door] ADD CONSTRAINT [PK_Door] PRIMARY KEY CLUSTERED  ([DoorId]) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_Door_RoomId] ON [dbo].[Door] ([RoomId]) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Door] ADD CONSTRAINT [FK_Door_Room_RoomId] FOREIGN KEY ([RoomId]) REFERENCES [dbo].[Room] ([RoomId]) ON DELETE CASCADE
+GO
