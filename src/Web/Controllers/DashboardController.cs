@@ -7,11 +7,15 @@
 	using TestingInNetCore.Service;
 
 	public class DashboardController : Controller {
+		private readonly ILockRepository lockRepository;
 		private readonly IDashboardGatherer dashboardGatherer;
 		private readonly IDoorLocker doorLocker;
 		private readonly IRandomDoorLocker randomDoorLocker;
 
-		public DashboardController(IDashboardGatherer DashboardGatherer, IDoorLocker DoorLocker, IRandomDoorLocker RandomDoorLocker) {
+		public DashboardController(ILockRepository LockRepository, IDashboardGatherer DashboardGatherer, IDoorLocker DoorLocker, IRandomDoorLocker RandomDoorLocker) {
+			if (LockRepository == null) {
+				throw new ArgumentNullException(nameof(LockRepository));
+			}
 			if (DashboardGatherer == null) {
 				throw new ArgumentNullException(nameof(DashboardGatherer));
 			}
@@ -21,6 +25,7 @@
 			if (RandomDoorLocker == null) {
 				throw new ArgumentNullException(nameof(RandomDoorLocker));
 			}
+			this.lockRepository = LockRepository;
 			this.dashboardGatherer = DashboardGatherer;
 			this.doorLocker = DoorLocker;
 			this.randomDoorLocker = RandomDoorLocker;
@@ -31,7 +36,9 @@
 		}
 
 		public IActionResult LockTheLock(int LockId, bool IsUnlocked) {
-			this.doorLocker.LockTheLock(LockId, IsUnlocked);
+			Lock lck = this.lockRepository.GetById(LockId);
+			this.doorLocker.LockTheLock(lck, IsUnlocked);
+			this.lockRepository.Update(lck);
 			return Json(new {success = true});
 		}
 

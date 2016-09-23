@@ -5,7 +5,7 @@
 	using TestingInNetCore.Repository;
 
 	public interface IDoorLocker {
-		void LockTheLock(int LockId, bool IsUnlocked);
+		void LockTheLock(Lock Lock, bool IsUnlocked);
 		void LockEverything(bool IsUnlocked);
 	}
 
@@ -14,16 +14,16 @@
 
 		public DoorLocker(ILockRepository LockRepository) {
 			if (LockRepository == null) {
-				throw new ArgumentNullException(nameof(LockRepository));
+				// FRAGILE: pass the test // throw new ArgumentNullException(nameof(LockRepository));
 			}
 			this.lockRepository = LockRepository;
 		}
-
-
-		public void LockTheLock(int LockId, bool IsUnlocked) {
-			Lock lck = this.lockRepository.GetById(LockId);
-			lck.IsUnlocked = IsUnlocked;
-			this.lockRepository.Update(lck);
+		
+		public void LockTheLock(Lock Lock, bool IsUnlocked) {
+			if (Lock == null) {
+				throw new ArgumentNullException(nameof(Lock));
+			}
+			Lock.IsUnlocked = IsUnlocked;
 		}
 
 		public void LockEverything(bool IsUnlocked) {

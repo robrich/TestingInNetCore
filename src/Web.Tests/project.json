@@ -1,0 +1,32 @@
+{
+    "version": "1.0.0-*",
+
+    "testRunner": "xunit",
+
+    "dependencies": {
+        "Microsoft.NETCore.App": {
+            "version": "1.0.1",
+            "type": "platform"
+        },
+        "FluentAssertions": "4.14.0",
+        "Moq": "4.6.38-alpha",
+        "xunit": "2.2.0-beta2-build3300",
+        "dotnet-test-xunit": "2.2.0-preview2-build1029",
+        "xunit.runner.console": "2.2.0-beta2-build3300",
+        "xunit.runner.visualstudio": "2.2.0-beta2-build1149",
+        "Web": "1.0.0-*",
+        "Service": "1.0.0-*",
+        "Repository": "1.0.0-*",
+        "Entity": "1.0.0-*",
+        "DataAccess": "1.0.0-*"
+    },
+
+    "frameworks": {
+        "netcoreapp1.0": {
+            "imports": [
+                "dotnet5.6",
+                "portable-net45+win8"
+            ]
+        }
+    }
+}
